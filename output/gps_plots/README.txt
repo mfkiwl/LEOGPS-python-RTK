@@ -1,1 +1,1 @@
-This folder keeps all plots of interpolated GPS ephemeris (XYZ positions and velocities) saved as PNG files.
+This folder keeps all records of interpolated GPS ephemeris (XYZ positions and velocities) saved in individual plot files.
