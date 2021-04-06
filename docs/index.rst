@@ -2,6 +2,18 @@
    sphinx-quickstart on Sat Mar 27 13:55:12 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
+   
+.. |docs| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square
+   :target: https://leogps.readthedocs.io/en/latest/
+
+.. |license| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+   :target: https://github.com/sammmlow/LEOGPS/blob/master/LICENSE
+   
+.. |orcid| image:: https://img.shields.io/badge/ID-0000--0002--1911--701X-a6ce39.svg
+   :target: https://orcid.org/0000-0002-1911-701X/
+   
+.. |linkedin| image:: https://img.shields.io/badge/LinkedIn-sammmlow-blue.svg
+   :target: https://www.linkedin.com/in/sammmlow
 
 .. image:: /_images/logo.png
 
@@ -11,6 +23,12 @@
 
 LEOGPS
 ------
+
+|docs| |license|
+
+*By: Samuel Y. W. Low*
+
+|linkedin| |orcid|
 
 LEOGPS is an open-source Python package that takes in GPS observations of formation flying satellites in pairs, to perform single point positioning (SPP) and precise relative positioning via carrier phase double-differential GPS (CDGPS). It currently supports only observations from the GPS constellation (L1/L2 frequency), with observation files in RINEX v2.XX format. LEOGPS gives credit to the University of Bern, for the CODE precise GPS ephemeris and clock files.
 
@@ -81,11 +99,11 @@ A summary of the processing flow in LEOGPS is given by the flow chart below.
 .. figure:: /_images/leogps_flowchart.png
     :align: center
     
-
+If the user wishes to use some of LEOGPS' existing algorithms, such as the single-point positioning (SPP) in **posvel.py** on multiple LEOs, or to solve for multiple baselines, the file to edit the code where you can call these functions is in **leorun.py**. This is the main processing tree that runs internally behind the GUI.
 
 
 5. Carrier Single Differencing
-------------------------------------
+------------------------------
 
 This segment of the LEOGPS documentation gets into the technicals of baseline estimation between formation flying satellites (or even between static stations in general), and it assumes that the user has sufficient knowledge on single-point positioning concepts. The algorithm described in this section is based on carrier phase differencing, and is largely implemented in the code file **ambest.py** (ambiguity estimation). For a tutorial on the more basic aspects of GNSS, the user is invited to peruse `ESA's NaviPedia <https://gssc.esa.int/navipedia/index.php/Main_Page>`_.
 
@@ -157,8 +175,10 @@ Observably, the single differenced solution still faces an accuracy > 1m. Embedd
 
 .. note:: Every step of differencing amplifies the random error sources by root-2, assuming the noises are well-modelled as a Gaussian.
 
+
+
 6. Carrier Double Differencing
-------------------------------------
+------------------------------
 
 We can actually go one step further beyond single differencing, and that is to difference across two reference GPS satellites. This step is called double differencing, and it is the backbone of the algorithm used in LEOGPS. This removes the relative receiver clock bias estimation errors, and this section will detail the algorithm and the results below.
 
@@ -191,11 +211,13 @@ In its essence, the single differencing paradigm changed the structure of the na
 
 
 
-7. Support
-----------
+7. Contact and Support
+----------------------
 
 For bugs, raise the issues in the `GitHub repository <https://github.com/sammmlow/LEOGPS/issues>`_.
 
-For collaborations, reach out to me: sammmlow@gmail.com
+For collaborations, reach out to me: sammmlow@gmail.com (Samuel Y. W. Low)
+
+|linkedin| |orcid|
 
 The project is licensed under the MIT license.
