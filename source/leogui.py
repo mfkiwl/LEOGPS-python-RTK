@@ -62,8 +62,12 @@ class run_gui:
         #'''Constructor. Takes in a tkinter.Tk() object as the sole argument.'''
         
         # Create the main frame and window.
-        master.title('LEOGPS v1.2')
-        master.geometry('1600x1200')
+        master.title('LEOGPS v1.2 - Relative Satellite Navigation in Python')
+        screen_height = master.winfo_screenheight()
+        screen_width = master.winfo_screenwidth()
+        master_geometry  = str(int(screen_width*0.8)) + 'x'
+        master_geometry += str(int(screen_height*0.8))
+        master.geometry(master_geometry)
         
         #####################################################################
         #####################################################################
@@ -74,21 +78,21 @@ class run_gui:
         #####################################################################
         
         # Initialise the basic text labels (found in the configuration file):
-        self.txt01 = 'Input the 4-letter ID of spacecraft A (LEOA)'
-        self.txt02 = 'Input the 4-letter ID of spacecraft B (LEOB)'
-        self.txt03 = 'Set the epoch start in GPST (YYYY-MM-DD-HH-MN-SS)'
-        self.txt04 = 'Set the epoch final in GPST (YYYY-MM-DD-HH-MN-SS)'
-        self.txt05 = 'Input the timestep in seconds (i.e. 30)'
-        self.txt06 = 'Enable single or dual frequency processing?'
-        self.txt07 = 'Enable Code-Carrier Hatch filtering?'
-        self.txt08 = 'Set the window length of the hatch filter'
-        self.txt09 = 'Set one-sigma tolerance for cycle slip detection'
-        self.txt10 = 'Set window length for cycle slip detection filter'
-        self.txt11 = 'Set the GPS antenna X offset (m) for vehicle.'
-        self.txt12 = 'Set the GPS antenna Y offset (m) for vehicle.'
-        self.txt13 = 'Set the GPS antenna Z offset (m) for vehicle.'
-        self.txt14 = 'Select the output orbit ephemeris frame.'
-        self.txt15 = 'Select the output relative baseline frame.'
+        self.txt01 = 'Spacecraft A 4-letter ID (LEOA)'
+        self.txt02 = 'Spacecraft B 4-letter ID (LEOB)'
+        self.txt03 = 'Epoch start (YYYY-MM-DD-HH-MN-SS)'
+        self.txt04 = 'Epoch sinal (YYYY-MM-DD-HH-MN-SS)'
+        self.txt05 = 'Timestep in seconds (i.e. 30)'
+        self.txt06 = 'Enable L1 or L1/L2 processing?'
+        self.txt07 = 'Enable code-carrier Hatch filter?'
+        self.txt08 = 'Set Hatch filter window length'
+        self.txt09 = 'Set cycle slip detection one-sigma'
+        self.txt10 = 'Set cycle slip detection filter length'
+        self.txt11 = 'Set the GPS antenna X offset (m)'
+        self.txt12 = 'Set the GPS antenna Y offset (m)'
+        self.txt13 = 'Set the GPS antenna Z offset (m)'
+        self.txt14 = 'Select the inertial orbit frame.'
+        self.txt15 = 'Select the relative orbit frame.'
         
         # Initialise tkinter variables for the entries corresponding to above.
         self.var01 = tk.StringVar() # 4-letter ID of LEO A
@@ -122,17 +126,28 @@ class run_gui:
         leogps_logo = dirname(dirname(abspath(__file__)))
         leogps_logo = leogps_logo + '\docs\_static\leogps_logo.png'
         
+        # Get the users current screen height.
+        screen_height = master.winfo_screenheight()
+        
         # Configure the background image and load the logo.
         image = Image.open( leogps_logo )
         photo = ImageTk.PhotoImage(image)
-        self.logo = tk.Label(image=photo)
-        self.logo.image = photo
-        self.logo.grid(row=0, column=0, padx=20, pady=20, columnspan=4)
+        image_h = photo.height()
+        image_w = photo.width()
+        logo_scale = image_w / image_h
+        logo_height = int(screen_height/8)
+        logo_width = int(logo_height*logo_scale)
+        image_resize = image.resize(( logo_width, logo_height ))
+        image_logo = ImageTk.PhotoImage(image_resize)
+        self.logo = tk.Label(image=image_logo)
+        self.logo.image = image_logo
+        self.logo.grid(row=0, column=0, padx=20, pady=20,
+                       sticky='w', columnspan=4)
         
         #####################################################################
         #####################################################################
         ###                                                               ###
-        ###            Add basic buttons for LOAD, SAVE, RUN              ###
+        ###         Add basic buttons for LOAD, SAVE, CLEAR, RUN          ###
         ###                                                               ###
         #####################################################################
         #####################################################################
@@ -156,6 +171,14 @@ class run_gui:
         self.runBtn = tk.Button(master, text='Run LEOGPS', command=self.run)
         self.runBtn.grid(row=0, column=8, padx=20, pady=2)
         self.runBtn.configure(bg="light blue")
+        
+        #####################################################################
+        #####################################################################
+        ###                                                               ###
+        ###               Add labels and main data entries                ###
+        ###                                                               ###
+        #####################################################################
+        #####################################################################
         
         # Input the 4-letter ID of the first spacecraft (i.e. LEOA).
         self.label01 = tk.Label(master, text=self.txt01 )
@@ -319,7 +342,7 @@ class run_gui:
         
         # Create the 3D axes matplotlib figure object, using the pack() method
         # of tkinter within the toolbarFrame object.
-        self.orbFig = Figure(figsize=(7,6), dpi=100,
+        self.orbFig = Figure(figsize=(5,4), dpi = master.winfo_fpixels('1i'),
                              linewidth=8, edgecolor="#DDDDDD")
         self.orbFig.set_tight_layout(True)
         self.orbPlot = FigureCanvasTkAgg(self.orbFig, self.toolbarFrame)
