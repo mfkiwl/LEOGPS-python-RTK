@@ -7,14 +7,14 @@
 ##    | |  | __ /   \ / __| _ | __|                                          ##
 ##    | |__| __| ( ) | (_ |  _|__ \                                          ##
 ##    |____|___ \___/ \___|_| \___/                                          ##
-##                                    v 1.2 (Stable)                         ##
+##                                    v 1.3 (Stable)                         ##
 ##                                                                           ##
 ##    This file contains the GUI class which based on Python tkinter.        ##
 ##    The class will be called in the main LEOGPS python file.               ##
 ##    (No inputs and outputs, just the GUI class object).                    ##
 ##                                                                           ##
 ##    Written by Samuel Y. W. Low.                                           ##
-##    Last modified 09-Aug-2021                                              ##
+##    Last modified 09-Sep-2021                                              ##
 ##    Website: https://github.com/sammmlow/LEOGPS                            ##
 ##    Documentation: https://leogps.readthedocs.io/en/latest/                ##
 ##                                                                           ##
@@ -30,11 +30,11 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 
-# Import the local libraries
+# Import local libraries
 from source import leorun
 from source import frames
 
-class run_gui:
+class RunGUI:
     
     '''This class represents the entire LEOGPS GUI, as a TKinter object.
     The constructor takes in a single tkinter.Tk() object as the root GUI.
@@ -59,7 +59,14 @@ class run_gui:
 
     def __init__(self, master):
         
-        #'''Constructor. Takes in a tkinter.Tk() object as the sole argument.'''
+        '''
+        Loads the GUI class object, taking a tkinter.Tk() object as input.
+        
+        Example initialisation:
+        >> root = tkinter.Tk()
+        >> root_gui = run_gui( root )
+        >> root.mainloop()
+        '''
         
         # Create the main frame and window.
         master.title('LEOGPS v1.2 - Relative Satellite Navigation in Python')
@@ -81,18 +88,18 @@ class run_gui:
         self.txt01 = 'Spacecraft A 4-letter ID (LEOA)'
         self.txt02 = 'Spacecraft B 4-letter ID (LEOB)'
         self.txt03 = 'Epoch start (YYYY-MM-DD-HH-MN-SS)'
-        self.txt04 = 'Epoch sinal (YYYY-MM-DD-HH-MN-SS)'
+        self.txt04 = 'Epoch final (YYYY-MM-DD-HH-MN-SS)'
         self.txt05 = 'Timestep in seconds (i.e. 30)'
         self.txt06 = 'Enable L1 or L1/L2 processing?'
         self.txt07 = 'Enable code-carrier Hatch filter?'
         self.txt08 = 'Set Hatch filter window length'
-        self.txt09 = 'Set cycle slip detection one-sigma'
+        self.txt09 = 'No. of sigmas in cycle slip detection'
         self.txt10 = 'Set cycle slip detection filter length'
-        self.txt11 = 'Set the GPS antenna X offset (m)'
-        self.txt12 = 'Set the GPS antenna Y offset (m)'
-        self.txt13 = 'Set the GPS antenna Z offset (m)'
-        self.txt14 = 'Select the inertial orbit frame.'
-        self.txt15 = 'Select the relative orbit frame.'
+        self.txt11 = 'GPS antenna Body-Frame X offset (m)'
+        self.txt12 = 'GPS antenna Body-Frame Y offset (m)'
+        self.txt13 = 'GPS antenna Body-Frame Z offset (m)'
+        self.txt14 = 'Absolute orbit frame (not in plot)' 
+        self.txt15 = 'Relative orbit frame (default Hill)'
         
         # Initialise tkinter variables for the entries corresponding to above.
         self.var01 = tk.StringVar() # 4-letter ID of LEO A
@@ -135,7 +142,7 @@ class run_gui:
         image_h = photo.height()
         image_w = photo.width()
         logo_scale = image_w / image_h
-        logo_height = int(screen_height/8)
+        logo_height = int(screen_height/6)
         logo_width = int(logo_height*logo_scale)
         image_resize = image.resize(( logo_width, logo_height ))
         image_logo = ImageTk.PhotoImage(image_resize)
@@ -275,7 +282,8 @@ class run_gui:
         # Set the GPS antenna offset in X-direction (m) for vehicle.
         self.label11 = tk.Label(master, text=self.txt11 )
         self.label11.grid(row=11, column=0, padx=40, pady=2, sticky='w')
-        self.entry11 = tk.Entry(master, width=10, textvariable=self.var11)
+        self.entry11 = tk.Entry(master, width=10, textvariable=self.var11,
+                                state=tk.DISABLED)
         self.entry11.grid(row=11, column=1, padx=5, pady=2, sticky='w',
                           columnspan=2)
         self.errtx11 = tk.Label(master, text='', fg='red' )
@@ -284,7 +292,8 @@ class run_gui:
         # Set the GPS antenna offset in Y-direction (m) for vehicle.
         self.label12 = tk.Label(master, text=self.txt12 )
         self.label12.grid(row=12, column=0, padx=40, pady=2, sticky='w')
-        self.entry12 = tk.Entry(master, width=10, textvariable=self.var12)
+        self.entry12 = tk.Entry(master, width=10, textvariable=self.var12,
+                                state=tk.DISABLED)
         self.entry12.grid(row=12, column=1, padx=5, pady=2, sticky='w',
                           columnspan=2)
         self.errtx12 = tk.Label(master, text='', fg='red' )
@@ -293,7 +302,8 @@ class run_gui:
         # Set the GPS antenna offset in Z-direction (m) for vehicle.
         self.label13 = tk.Label(master, text=self.txt13 )
         self.label13.grid(row=13, column=0, padx=40, pady=2, sticky='w')
-        self.entry13 = tk.Entry(master, width=10, textvariable=self.var13)
+        self.entry13 = tk.Entry(master, width=10, textvariable=self.var13,
+                                state=tk.DISABLED)
         self.entry13.grid(row=13, column=1, padx=5, pady=2, sticky='w',
                           columnspan=2)
         self.errtx13 = tk.Label(master, text='', fg='red' )
@@ -342,7 +352,7 @@ class run_gui:
         
         # Create the 3D axes matplotlib figure object, using the pack() method
         # of tkinter within the toolbarFrame object.
-        self.orbFig = Figure(figsize=(5,4), dpi = master.winfo_fpixels('1i'),
+        self.orbFig = Figure(figsize=(5,4), dpi = master.winfo_fpixels('2.0c'),
                              linewidth=8, edgecolor="#DDDDDD")
         self.orbFig.set_tight_layout(True)
         self.orbPlot = FigureCanvasTkAgg(self.orbFig, self.toolbarFrame)
@@ -386,6 +396,12 @@ class run_gui:
     #####################################################################
     
     def _callback_hatch(self):
+        
+        '''
+        Basically a call back function to disable the Hatch filter parameters
+        if Hatch filtering was disabled.
+        '''
+        
         try:
             _hatch = self.var07.get()
             if _hatch == 0:
@@ -408,6 +424,20 @@ class run_gui:
     
     def cfg_R(self):
         
+        '''
+        This method does two things. First, this method checks that all inputs
+        in config.txt are correct. Second, it copies the input parameters into
+        the GUI's TKinter variables.
+        '''
+        
+        # First, ask the user if he/she wishes to proceed.
+        cfg_R_msg = 'Load parameters from the "config.txt" file? \n'
+        cfg_R_msg += '(This will overwrite existing inputs in the GUI!)'
+        cfg_R_ask = tk.messagebox.askyesno('Load Config', cfg_R_msg)
+        if cfg_R_ask == False:
+            return None
+        
+        # Else, continue with loading the configuration file.
         cwd = dirname(dirname(abspath(__file__))) # Current working directory
         iwd = join(cwd, 'config', 'config.txt') # Inputs files
         inputfile = open(iwd,'r') # Open the config.txt file
@@ -646,11 +676,11 @@ class run_gui:
         # 9. Number of standard deviations for cycle slip tolerance.
         
         self.var09.set(inps['cycsliptol'])
-        if type(inps['cycsliptol']) == float:
+        if type(inps['cycsliptol']) == float and inps['cycsliptol'] > 0.0:
             errmsg = ''
             self.errtx09.configure(text='')
         else:
-            errmsg = 'Error! Tolerance must be float! \n'
+            errmsg = 'Error! Tolerance must be positive float! \n'
             self.errtx09.configure(text='!')
         self.error_msgprint += errmsg
         
@@ -795,7 +825,20 @@ class run_gui:
     
     def cfg_W(self):
         
-        # Reset the GUI error message variable.
+        '''
+        This method does two things. First, this method checks that all inputs
+        in the GUI are correct. Second, it copies the GUI parameters into the
+        config.txt file after all checks are complete.
+        '''
+        
+        # First, ask the user if he/she wishes to proceed.
+        cfg_W_msg = 'Save GUI parameters into the "config.txt" file? \n'
+        cfg_W_msg += '(This will overwrite parameters in "config.txt"!)'
+        cfg_W_ask = tk.messagebox.askyesno('Save Config', cfg_W_msg)
+        if cfg_W_ask == False:
+            return None
+        
+        # Else, continue with saving the configurations.
         self.error_msgprint = ''
         
         # Get the directory paths.
@@ -1287,6 +1330,13 @@ class run_gui:
     
     def clr(self):
         
+        # First, ask the user if he/she wishes to proceed.
+        clr_msg = 'Clear the plot in the GUI?'
+        clr_ask = tk.messagebox.askyesno('Clear Plots', clr_msg)
+        if clr_ask == False:
+            return None
+        
+        # Else, continue with clearing the plots.
         self.orbAxis.clear()
         self.orbPlot.draw()
         
@@ -1302,6 +1352,12 @@ class run_gui:
     #########################################################################
     
     def run(self):
+        
+        # First, ask the user if he/she wishes to proceed.
+        run_msg = 'Save Parameters and Run LEOGPS?'
+        run_ask = tk.messagebox.askyesno('Run LEOGPS?', run_msg)
+        if run_ask == False:
+            return None
         
         try:
             

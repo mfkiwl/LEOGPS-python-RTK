@@ -7,10 +7,10 @@
 ##    | |  | __ /   \ / __| _ | __|                                          ##
 ##    | |__| __| ( ) | (_ |  _|__ \                                          ##
 ##    |____|___ \___/ \___|_| \___/                                          ##
-##                                    v 1.2 (Stable)                         ##
+##                                    v 1.3 (Stable)                         ##
 ##                                                                           ##
 ##    Written by Samuel Y. W. Low.                                           ##
-##    Last modified 09-Aug-2021.                                             ##
+##    Last modified 11-Sep-2021.                                             ##
 ##    Website: https://github.com/sammmlow/LEOGPS                            ##
 ##    Documentation: https://leogps.readthedocs.io/en/latest/                ##
 ##                                                                           ##
@@ -25,7 +25,7 @@ from source import leogui
 
 # Initialise the GUI.
 root = tkinter.Tk()
-root_gui = leogui.run_gui( root )
+root_gui = leogui.RunGUI( root )
 root.mainloop()
 
 # To run LEOGPS manually without GUI, comment out lines 27-29. Then, edit 
