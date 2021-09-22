@@ -32,7 +32,6 @@ from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 
 # Import local libraries
 from source import leorun
-from source import frames
 
 class RunGUI:
     
@@ -69,11 +68,11 @@ class RunGUI:
         '''
         
         # Create the main frame and window.
-        master.title('LEOGPS v1.2 - Relative Satellite Navigation in Python')
+        master.title('LEOGPS v1.3 - Relative Satellite Navigation in Python')
         screen_height = master.winfo_screenheight()
         screen_width = master.winfo_screenwidth()
-        master_geometry  = str(int(screen_width*0.8)) + 'x'
-        master_geometry += str(int(screen_height*0.8))
+        master_geometry  = str(int(screen_width*0.85)) + 'x'
+        master_geometry += str(int(screen_height*0.85))
         master.geometry(master_geometry)
         
         #####################################################################
@@ -397,11 +396,6 @@ class RunGUI:
     
     def _callback_hatch(self):
         
-        '''
-        Basically a call back function to disable the Hatch filter parameters
-        if Hatch filtering was disabled.
-        '''
-        
         try:
             _hatch = self.var07.get()
             if _hatch == 0:
@@ -423,12 +417,6 @@ class RunGUI:
     #########################################################################
     
     def cfg_R(self):
-        
-        '''
-        This method does two things. First, this method checks that all inputs
-        in config.txt are correct. Second, it copies the input parameters into
-        the GUI's TKinter variables.
-        '''
         
         # First, ask the user if he/she wishes to proceed.
         cfg_R_msg = 'Load parameters from the "config.txt" file? \n'
@@ -824,12 +812,6 @@ class RunGUI:
     #########################################################################
     
     def cfg_W(self):
-        
-        '''
-        This method does two things. First, this method checks that all inputs
-        in the GUI are correct. Second, it copies the GUI parameters into the
-        config.txt file after all checks are complete.
-        '''
         
         # First, ask the user if he/she wishes to proceed.
         cfg_W_msg = 'Save GUI parameters into the "config.txt" file? \n'
