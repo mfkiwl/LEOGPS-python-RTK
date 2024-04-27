@@ -22,10 +22,10 @@
 ###############################################################################
 
 # Import global libraries
-import datetime
+import os
 import matplotlib.pyplot as plt
 from decimal import Decimal
-import os
+
 def gps_report(gpsdata, goodsats, inps):
     '''Generates an ASCII text report of GPS position, velocity, and clock
     bias (ITRF). Report will be saved in the `output/gps_report` folder.
@@ -48,7 +48,10 @@ def gps_report(gpsdata, goodsats, inps):
     
     cwd = inps['cwd'] # Get current main working directory
     
-    file_path = open(cwd+ os.sep + 'output' + os.sep + 'gps_report' +  os.sep +'GPS_Report.txt', 'w')
+    file_pathStr =  cwd + os.sep + 'output'
+    file_pathStr += os.sep + 'gps_report'
+    file_pathStr += os.sep + 'GPS_Report.txt'
+    file_path = open(file_pathStr, 'w')
     
     line = 'G         '
     line += 'Pos_X (km)       '
@@ -183,7 +186,9 @@ def gps_graphs(SV, t_usr_dt, t_usr_ss, gpsdata, inps):
     
     # Tight-spaced plot
     plt.tight_layout()
-    plt.savefig(cwd + os.sep + 'output' + os.sep + 'gps_plots' + os.sep + 'GPS_SV' + str(SV) + '_PVT.png')
+    savefigPath  = cwd + os.sep + 'output' + os.sep
+    savefigPath += 'gps_plots' + os.sep + 'GPS_SV' + str(SV) + '_PVT.png'
+    plt.savefig( savefigPath )
     
     # Close this figure
     plt.close(fig)
@@ -220,7 +225,8 @@ def leo_results(results, inps):
     frameOrb = inps['frameOrb']
     frameForm = inps['frameForm']
     
-    file_path = open(cwd+ os.sep + 'output' + os.sep + 'LEOGPS_Results.txt', 'w')
+    file_name = 'LEOGPS_Results.txt'
+    file_path = open(cwd + os.sep + 'output' + os.sep + file_name, 'w')
     
     line  = 'Date       '
     line += 'Time      '

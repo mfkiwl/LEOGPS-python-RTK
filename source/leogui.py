@@ -101,7 +101,7 @@ class RunGUI:
         self.txt13 = 'GPS antenna Body-Frame Z offset (m)'
         self.txt14 = 'Absolute orbit frame (not in plot)' 
         self.txt15 = 'Relative orbit frame (default Hill)'
-        
+  
         # Initialise tkinter variables for the entries corresponding to above.
         self.var01 = tk.StringVar() # 4-letter ID of LEO A
         self.var02 = tk.StringVar() # 4-letter ID of LEO B
@@ -132,8 +132,9 @@ class RunGUI:
         
         # Define the path to the LEOGPS logo file.
         leogps_logo = dirname(dirname(abspath(__file__)))
-        leogps_logo = leogps_logo + os.sep + 'docs' + os.sep + '_static' + os.sep + 'leogps_logo.png'
-        print(leogps_logo)
+        leogps_logo = leogps_logo + os.sep + 'docs' + os.sep
+        leogps_logo = leogps_logo + '_static' + os.sep + 'leogps_logo.png'
+        
         # Get the users current screen height.
         screen_height = master.winfo_screenheight()
         
@@ -793,8 +794,8 @@ class RunGUI:
         #####################################################################
         #####################################################################
         
-        # Finally, display an error textbox if there are any error messages.
         
+        # Finally, display an error textbox if there are any error messages.
         if len(self.error_msgprint) > 0:
             tk.messagebox.showerror("Error with Configuration File!",
                                     self.error_msgprint)
@@ -1242,7 +1243,7 @@ class RunGUI:
             self.entry15c.deselect()
         finally:
             self.error_msgprint += errmsg
-        
+            
         #####################################################################
         #####################################################################
         

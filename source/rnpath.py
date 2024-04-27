@@ -42,7 +42,7 @@
 # Import global libraries
 import hatanaka
 from pathlib import Path
-
+import os
 def rnpath(inps):
     '''Gets the paths to RINEX files, following AIUB CODE's naming convention.
 
@@ -59,21 +59,25 @@ def rnpath(inps):
         Path of RINEX file of LEO-B
     
     '''
-    
-    # Let us start by parsing out all relevant user configuration inputs.
-    yy       = inps['dtstart_yy'] # The starting two-digit year number
-    doy      = inps['dtstart_doy'] # The starting day of year in GPST
-    cwd      = Path(inps['cwd']) # Current working directory
-    iwd      = cwd / 'input'
-    name1    = inps['name1'] # 4-letter ID of the first spacecraft
-    name2    = inps['name2'] # 4-letter ID of the second spacecraft
 
-    # Now, we get all necessary file paths, in the input folder.
-    rnx1file = iwd / (name1 + doy + '0.' + yy + 'O') # pathlib Path class
-    rnx2file = iwd / (name2 + doy + '0.' + yy + 'O') # pathlib Path class
-    crx1file = iwd / (name1 + doy + '0.' + yy + 'D') # pathlib Path class
-    crx2file = iwd / (name2 + doy + '0.' + yy + 'D') # pathlib Path class
+    # Let us start by parsing out all relevant user configuration inputs.
+    yy       = inps['dtstart_yy']  # The starting two-digit year number
+    doy      = inps['dtstart_doy'] # The starting day of year in GPST
+    cwd      = os.getcwd()         # Current working directory
+    iwd      = cwd + os.sep + 'input' + os.sep
+    name1    = inps['name1']       # 4-letter ID of the first spacecraft
+    name2    = inps['name2']       # 4-letter ID of the second spacecraft
     
+    # Now, we get all necessary file paths, in the input folder.
+    rnx1file = Path(iwd + (name1 + doy + '0.' + yy + 'O')) 
+    rnx2file = Path(iwd + (name2 + doy + '0.' + yy + 'O')) 
+    crx1file = Path(iwd + (name1 + doy + '0.' + yy + 'D')) 
+    crx2file = Path(iwd + (name2 + doy + '0.' + yy + 'D')) 
+    
+    print(rnx1file)
+    print(rnx2file)
+    print('hello')
+ 
     # Check if there is a need for hatanaka decompression for LEO 1.
     if rnx1file.exists():
         print('Decompressed RINEX obs file observed for ' + name1 + '\n')

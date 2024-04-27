@@ -10,7 +10,7 @@
 ##                                    v 1.3 (Stable)                         ##
 ##                                                                           ##
 ##    Written by Samuel Y. W. Low.                                           ##
-##    Last modified 11-Sep-2021.                                             ##
+##    Last modified 18-Jul-2022 (By Andrew G. T. Ng).                                             ##
 ##    Website: https://github.com/sammmlow/LEOGPS                            ##
 ##    Documentation: https://leogps.readthedocs.io/en/latest/                ##
 ##                                                                           ##

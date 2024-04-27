@@ -19,6 +19,7 @@
 ##                                                                           ##
 ###############################################################################
 ###############################################################################
+
 ~:
 ~: Input the 4-letter ID of the first spacecraft (i.e. LEOA)
 I: name1 GRCA
@@ -33,13 +34,13 @@ I: dtstart 2010-07-27-06-30-00
 I: dtstop 2010-07-27-18-30-00
 ~: 
 ~: Input the timestep in seconds (i.e. 30)
-I: timestep 10
+I: timestep 1
 ~: 
 ~: Input single or dual frequency processing (i.e. 1 or 2)
 I: freq 2
 ~: 
 ~: Enable code-carrier smoothing via Hatch filter (case sensitive True/False)?
-I: hatchfilter False
+I: hatchfilter True
 ~: 
 ~: What is the length (integer number of epochs) of the hatch filter used?
 I: hatchlength 10
@@ -65,5 +66,6 @@ I: frameOrb ICRF
 ~: Select the output relative baseline coordinate frame
 I: frameForm Hill
 ~:
+
 ###############################################################################
 ###############################################################################
